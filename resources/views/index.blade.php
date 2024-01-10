@@ -6,7 +6,7 @@
 
         <title>{{ $setting->nama_app }}</title>
         <!-- Favicon -->
-        <link rel="shortcut icon" type="image/x-icon" href="{{'/storage/favicon/favicon.png'}}" />
+        <!-- <link rel="shortcut icon" type="image/x-icon" href="{{'/storage/favicon/favicon.png'}}" /> -->
         <!-- Fonts -->
         <link href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
         <!-- fontawesome -->
@@ -40,30 +40,105 @@
                     </a>
                 </nav>
                 
-                <script>
-                    const osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        attribution: 'Made with <i class="fa fa-heart text-danger"></i> by <a href="https://jihadul4kbar.github.io/" target="_blank">Jihadul Akbar</a> &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                    });
-                    const osmHOT = L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
-                        attribution: 'Made with <i class="fa fa-heart text-danger"></i> by <a href="https://jihadul4kbar.github.io/" target="_blank">Jihadul Akbar</a> &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                    });
-                    const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-                        attribution: 'Made with <i class="fa fa-heart text-danger"></i> by <a href="https://jihadul4kbar.github.io/" target="_blank">Jihadul Akbar</a> &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                    });
-                    const map = L.map('map',{
-                        maxZoom: 20,
-                        minZoom: 6,
-                        zoomControl: true,
-                        layers: [osm]
-                    }).setView([{{ $setting->latitude }},{{ $setting->longitude }}], {{ $setting->zoom }});
-                    
-                    const baseLayers = {
-                        'Open Street Map': osm,
-                        'Humanitarian Map': osmHOT,
-                        'Satellite' :satellite
-                    };
+                <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" ></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script src="{{asset('js/geojeson') }}/Kelurahan Tiwugalih.js" type="text/javascript"></script>
+    <!-- <script src="{{asset('js/geojeson') }}/lomboktengah.js" type="text/javascript"></script>
+    <script src="{{asset('js/geojeson') }}/batukliangutara.js" type="text/javascript"></script>
+    <script src="{{asset('js/geojeson') }}/janapria.js" type="text/javascript"></script>
+    <script src="{{asset('js/geojeson') }}/jonggat.js" type="text/javascript"></script>
+    <script src="{{asset('js/geojeson') }}/kopang.js" type="text/javascript"></script>
+    <script src="{{asset('js/geojeson') }}/praya.js" type="text/javascript"></script>
+    <script src="{{asset('js/geojeson') }}/prayabarat.js" type="text/javascript"></script>
+    <script src="{{asset('js/geojeson') }}/prayabaratdaya.js" type="text/javascript"></script>
+    <script src="{{asset('js/geojeson') }}/prayatengahh.js" type="text/javascript"></script>
+    <script src="{{asset('js/geojeson') }}/prayatimur.js" type="text/javascript"></script>
+    <script src="{{asset('js/geojeson') }}/pringgarata.js" type="text/javascript"></script>
+    <script src="{{asset('js/geojeson') }}/pujut.js" type="text/javascript"></script> -->
+    <script type="text/javascript">
 
-                    //Layer Group
+   	//add map utama
+	var mymap = L.map('map').setView([-8.7101231,116.2861788], 13);
+
+	L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+}).addTo(mymap);
+
+	var marker1 = L.marker([-8.7101231,116.2861788]).addTo(mymap)
+		.bindPopup("<b>Ini adalah Titik</b><br />Kelurahan Tiwugalih.").openPopup();
+	var popup = L.popup();
+
+
+
+
+		function onEachFeature(feature, layer) {
+		var popupContent = "<p>Selamat datang di, Kelurahan Tiwugalih!</p>";
+
+		if (feature.properties && feature.properties.popupContent) {
+			popupContent += feature.properties.popupContent;
+		}
+
+		layer.bindPopup(popupContent);
+	}
+
+	L.geoJSON([tiwugalih], {
+		style: function (feature) {
+			return feature.properties && feature.properties.style;
+		},
+
+		onEachFeature: onEachFeature,
+
+		pointToLayer: function (feature, latlng) {
+			return L.circleMarker(latlng, {
+				radius: 8,
+				fillColor: "#ff7800",
+				color: "#000",
+				weight: 1,
+				opacity: 1,
+				fillOpacity: 0.8
+			});
+		}
+	}).addTo(mymap);
+
+	var streets  = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            id: 'mapbox.streets',   
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        });
+        var satelit = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            id: 'mapbox.streets',
+            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+            });
+
+	var baseLayers = {
+		"Streets": streets,
+        "Satelite" : satelit
+	};
+
+	var mapIcon = L.Icon.extend({
+	    iconSize:     [32, 37]
+	});
+	var sekolahIcon =  new mapIcon({iconUrl: "{{('asset/icon')}}/school.png"});
+
+	//##############################################//
+	// TAMAN BERMAIN
+	//##############################################//
+	var sekolah = L.marker([-8.7045539, 116.2712998],{icon: sekolahIcon}).bindPopup("Alun-Alun Tastura <img src='img/karangbulayak.jpg' alt='Pasar Karang Bulayak' width='350px'/>");
+	
+
+
+	var sekolah = L.layerGroup([sekolah]);
+	
+	var ooverlays = {
+		"sekolah " : sekolah
+	};
+    L.control.layers(baseLayers, ooverlays).addTo(mymap);
+
+
+	  //Layer Group
                     @foreach ($kategori as $row)
                     const  {{ strtolower(str_replace(' ', '_', $row->kategori)) }} = L.layerGroup();
                     @endforeach
@@ -80,9 +155,9 @@
 
                     
                     const layerControl = L.control.layers(baseLayers, overlays).addTo(map);;
-        </script>
-        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
+    </script>
+
     </body>
 </html>
